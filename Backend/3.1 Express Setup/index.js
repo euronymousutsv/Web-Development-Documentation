@@ -1,7 +1,10 @@
 import express from 'express';
 import {dirname} from "path";
 import { fileURLToPath } from 'url';
+import bodyParser from "body-parser" //pre-processing middle ware 
+
 const app= express();
+app.use(bodyParser.urlencoded({extended:true})) //defining middleware
 const port = 3000;
 const __dirname= dirname(fileURLToPath(import.meta.url)) //getting root directory
 app.get("/",(req,res)=>{
@@ -14,8 +17,12 @@ app.get("/Contact",(req,res)=>{
 app.get("/about",(req,res)=>{
     res.send("<h1>About</h1>")
 })
-app.get("/form-submit",(req,res)=>{
+app.get("/form-submit",(req,res)=>{ //SSR
     res.sendFile(__dirname + "/public/index.html") //send file
+})
+app.post("/submit",(req,res)=>{   // getting request body, use of body parser middleware.
+    console.log(req.body);
+    res.send("<h1>Success</h1>")
 })
 app.post("/register",(req,res)=>{
 res.sendStatus(201);
